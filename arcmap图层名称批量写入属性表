@@ -1,0 +1,15 @@
+arcpy.env.workspace = "F:/xt_house"#mxd文件的保存路径，我的是F盘xt_house文件夹
+import arcpy
+mxd = arcpy.mapping.MapDocument(r"CURRENT")  #需要修改的mxd的路径
+df  = arcpy.mapping.ListDataFrames(mxd, "")[0]                #该mxd下面第一个数据框
+lyr = arcpy.mapping.ListLayers(mxd, "", df)             #该数据框下所有的图层
+for ly in lyr:
+    name=ly.name                                    #读取图层的名字
+    try:
+       arcpy.AddField_management(ly, "test", "TEXT", "", "", "20") #执行添加test的字段
+    
+       fieldName = "test"
+       expression = "'"+name+"'"
+       arcpy.CalculateField_management(ly, fieldName, expression, "PYTHON_9.3") #将名字写入test字段
+    except Exception,e:
+       print e
